@@ -460,6 +460,7 @@ module SimpleCov
     def make_parallel_tests_available
       return if defined?(ParallelTests)
       return unless probably_running_parallel_tests?
+      return if running_rspec_conductor?
 
       require "parallel_tests"
     rescue LoadError
@@ -468,6 +469,10 @@ module SimpleCov
 
     def probably_running_parallel_tests?
       ENV.fetch("TEST_ENV_NUMBER", nil) && ENV.fetch("PARALLEL_TEST_GROUPS", nil)
+    end
+
+    def running_rspec_conductor?
+      defined?(RSpec::Conductor)
     end
   end
 end
